@@ -79,6 +79,8 @@ fun MainScreenView( viewModel: RandomStringViewModel,list: MutableList<RandomStr
             label = { Text("Enter Text") },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
+
+
         )
         // Button below the TextField
         Button(onClick = {
