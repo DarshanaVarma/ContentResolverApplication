@@ -49,12 +49,12 @@ class MainActivity : ComponentActivity() {
             RandomStringViewModelFactory(randomStringRepository)
         )[RandomStringViewModel::class.java]
 
-        viewModel.randomString.observe(this, Observer { randomString ->
+        viewModel.randomString.observe(this) { randomString ->
             randomString?.let {
                 randomStringList.add(0, randomString)
                 Log.d("VALUE OF RANDOM STRING IS", it.toString())
             }
-        })
+        }
 
         setContent {
             ContentResolverSampleAppTheme {
