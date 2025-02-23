@@ -1,7 +1,9 @@
 package com.example.contentresolversampleapp.view
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.contentresolversampleapp.model.RandomString
 import com.example.contentresolversampleapp.model.RandomStringRepository
@@ -63,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreenView(viewModel, randomStringList)
+                    MainScreenView(viewModel, randomStringList, this@MainActivity)
                 }
             }
         }
@@ -72,7 +73,11 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainScreenView(viewModel: RandomStringViewModel, list: MutableList<RandomString>) {
+fun MainScreenView(
+    viewModel: RandomStringViewModel,
+    list: MutableList<RandomString>,
+    context: Context
+) {
 
     var text by remember { mutableStateOf("") }  // State to store text input
 
@@ -93,9 +98,13 @@ fun MainScreenView(viewModel: RandomStringViewModel, list: MutableList<RandomStr
 
         Button(
             onClick = {
-                if (text.isNotEmpty()) {
+                text = if ((text.isNotEmpty()) && text.matches("-?\\d+(\\.\\d+)?".toRegex())) {
                     viewModel.generateRandomString(text.toInt())
-                    text = ""
+                    ""
+                } else {
+                    Toast.makeText(context, "Please enter a valid integer", Toast.LENGTH_SHORT)
+                        .show()
+                    ""
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -120,7 +129,7 @@ fun RandomStringCard(randomString: RandomString) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
 
-        Row{
+        Row {
             Text(
                 text = "String: ${randomString.value}",
                 modifier = Modifier.padding(16.dp)
