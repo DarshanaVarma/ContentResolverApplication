@@ -15,6 +15,4 @@ class RandomStringViewModel(private val randomStringRepository: RandomStringRepo
         _randomString.postValue(randomStringObject)
         return _randomString
     }
-
-
 }
